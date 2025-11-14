@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catatan Pembelian Produk Batik</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f7f7f7;
+        }
+        h2 {
+            text-align: center;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            font-size: 14px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        .btn-delete {
+            background: red;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Catatan Pembelian Produk Batik</h2>
+
+        <label>Nama Produk</label>
+        <input type="text" id="produk" placeholder="Masukkan nama produk">
+
+        <label>Jumlah</label>
+        <input type="number" id="jumlah" placeholder="Masukkan jumlah pembelian">
+
+        <label>Harga Satuan</label>
+        <input type="number" id="harga" placeholder="Masukkan harga satuan">
+
+        <button onclick="tambahData()">Tambah Pembelian</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Produk</th>
+                    <th>Jumlah</th>
+                    <th>Harga Satuan</th>
+                    <th>Total</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="tabelData"></tbody>
+        </table>
+
+        <h3>Total Keseluruhan: <span id="totalKeseluruhan">0</span></h3>
+    </div>
+
+    <script>
+        let dataPembelian = [];
+
+        function tambahData() {
+            let produk = document.getElementById('produk').value;
+            let jumlah = document.getElementById('jumlah').value;
+            let harga = document.getElementById('harga').value;
+
+            if (produk === '' || jumlah === '' || harga === '') {
+                alert('Semua input wajib diisi!');
+                return;
+            }
+
+            let total = jumlah * harga;
+
+            dataPembelian.push({ produk, jumlah, harga, total });
+            tampilkanData();
+            resetForm();
+        }
+
+        function tampilkanData() {
+            let tabel = document.getElementById('tabelData');
+            tabel.innerHTML = '';
+            let totalKes = 0;
+
+            dataPembelian.forEach((item, index) => {
+                totalKes += item.total;
+                tabel.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.produk}</td>
+                        <td>${item.jumlah}</td>
+                        <td>${item.harga}</td>
+                        <td>${item.total}</td>
+                        <td><button class="btn-delete" onclick="hapusData(${index})">Hapus</button></td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('totalKeseluruhan').innerText = totalKes;
+        }
+
+        function hapusData(index) {
+            dataPembelian.splice(index, 1);
+            tampilkanData();
+        }
+
+        function resetForm() {
+            document.getElementById('produk').value = '';
+            document.getElementById('jumlah').value = '';
+            document.getElementById('harga').value = '';
+        }
+    </script>
+</body>
+</html>

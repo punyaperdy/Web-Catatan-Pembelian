@@ -53,11 +53,20 @@
     <div class="container">
         <h2>Catatan Pembelian Produk Batik</h2>
 
+        <label>Tanggal Pembelian</label>
+        <input type="date" id="tanggal">
+
         <label>Nama Produk</label>
         <input type="text" id="produk" placeholder="Masukkan nama produk">
 
-        <label>Jumlah</label>
-        <input type="number" id="jumlah" placeholder="Masukkan jumlah pembelian">
+        <label>Jenis Barang</label>
+        <input type="text" id="jenis" placeholder="Masukkan jenis barang">
+
+        <label>Kategori</label>
+        <input type="text" id="kategori" placeholder="Masukkan kategori produk">
+
+        <label>Banyaknya Barang</label>
+        <input type="number" id="banyak" placeholder="Masukkan banyaknya barang">
 
         <label>Harga Satuan</label>
         <input type="number" id="harga" placeholder="Masukkan harga satuan">
@@ -68,8 +77,11 @@
             <thead>
                 <tr>
                     <th>No</th>
+                    <th>Tanggal</th>
                     <th>Produk</th>
-                    <th>Jumlah</th>
+                    <th>Jenis</th>
+                    <th>Kategori</th>
+                    <th>Banyaknya</th>
                     <th>Harga Satuan</th>
                     <th>Total</th>
                     <th>Aksi</th>
@@ -85,20 +97,63 @@
         let dataPembelian = [];
 
         function tambahData() {
+            let tanggal = document.getElementById('tanggal').value;
             let produk = document.getElementById('produk').value;
-            let jumlah = document.getElementById('jumlah').value;
+            let jenis = document.getElementById('jenis').value;
+            let kategori = document.getElementById('kategori').value;
+            let banyak = document.getElementById('banyak').value;
             let harga = document.getElementById('harga').value;
 
-            if (produk === '' || jumlah === '' || harga === '') {
+            if (tanggal === '' || produk === '' || jenis === '' || kategori === '' || banyak === '' || harga === '') {
                 alert('Semua input wajib diisi!');
                 return;
             }
 
-            let total = jumlah * harga;
+            let total = banyak * harga;
 
-            dataPembelian.push({ produk, jumlah, harga, total });
+            dataPembelian.push({ tanggal, produk, jenis, kategori, banyak, harga, total });
             tampilkanData();
             resetForm();
+        }
+
+        function tampilkanData() {
+            let tabel = document.getElementById('tabelData');
+            tabel.innerHTML = '';
+            let totalKes = 0;
+
+            dataPembelian.forEach((item, index) => {
+                totalKes += item.total;
+                tabel.innerHTML += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.tanggal}</td>
+                        <td>${item.produk}</td>
+                        <td>${item.jenis}</td>
+                        <td>${item.kategori}</td>
+                        <td>${item.banyak}</td>
+                        <td>${item.harga}</td>
+                        <td>${item.total}</td>
+                        <td><button class="btn-delete" onclick="hapusData(${index})">Hapus</button></td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('totalKeseluruhan').innerText = totalKes;
+        }
+
+        function hapusData(index) {
+            dataPembelian.splice(index, 1);
+            tampilkanData();
+        }
+
+        function resetForm() {
+            document.getElementById('tanggal').value = '';
+            document.getElementById('produk').value = '';
+            document.getElementById('jenis').value = '';
+            document.getElementById('kategori').value = '';
+            document.getElementById('banyak').value = '';
+            document.getElementById('harga').value = '';
+        }();
         }
 
         function tampilkanData() {
